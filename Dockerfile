@@ -1,17 +1,21 @@
-# Use an official Python base image
-FROM python:3.10-slim
+# Use Red Hat Universal Base Image 8
+FROM registry.access.redhat.com/ubi8/ubi
+
+# Install Python 3 and pip
+RUN dnf install -y python3 python3-pip && \
+    dnf clean all
+
+# Install Flask
+RUN pip3 install flask
 
 # Set working directory
 WORKDIR /app
 
-# Copy your code
+# Copy your Flask app
 COPY . .
 
-# Install dependencies
-RUN pip install flask
-
-# Expose the port Flask runs on
+# Expose Flask port
 EXPOSE 5000
 
-# Run the app
-CMD ["python", "app.py"]
+# Run the app (bind to all interfaces)
+CMD ["python3", "app.py"]
